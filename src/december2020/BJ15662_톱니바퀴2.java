@@ -2,13 +2,13 @@ package december2020;
 import java.util.*;
 import java.io.*;
 
-// 2020.12.10
+// 2020.12.19
 
-public class BJ14891_톱니바퀴 {
+public class BJ15662_톱니바퀴2 {
 	static final int LEFT = 0, RIGHT = 1;
-	static int K;
-	static int[][] cog = new int[5][10];
-	static int[][] idx = new int[5][2];
+	static int T, K;
+	static int[][] cog;
+	static int[][] idx;
 	static int[][] order;
 	
 	public static void main(String[] args) throws IOException {
@@ -18,7 +18,7 @@ public class BJ14891_톱니바퀴 {
 	}
 	
 	public static void print() {
-		 for (int i = 1; i <= 4; i++) {
+		 for (int i = 1; i <= T; i++) {
 			 for (int j = 0; j < 8; j++) 
 				 System.out.print(cog[i][j] + " ");
 			 System.out.println();
@@ -27,7 +27,7 @@ public class BJ14891_톱니바퀴 {
 	
 	public static void printIdx() {
 		System.out.println("L, R");
-		for (int i = 1; i <= 4; i++) {
+		for (int i = 1; i <= T; i++) {
 			for (int j = 0; j < 2; j++) 
 				System.out.print(idx[i][j] + " ");
 			System.out.println();
@@ -39,11 +39,15 @@ public class BJ14891_톱니바퀴 {
 		//br = new BufferedReader(new StringReader(src));
 		StringTokenizer st;
 		
-		for (int i = 1; i <= 4; i++) {
+		T = Integer.parseInt(br.readLine());
+		cog = new int[T + 1][10];
+		idx = new int[T + 1][2];
+		for (int i = 1; i <= T; i++) {
 			String[] temp = br.readLine().split("");
 			
 			for (int j = 0; j < 8; j++)
 				cog[i][j] = Integer.parseInt(temp[j]);
+			
 			
 			idx[i][LEFT] = 6;
 			idx[i][RIGHT] = 2;
@@ -62,7 +66,7 @@ public class BJ14891_톱니바퀴 {
 		for (int k = 0; k < K; k++) {
 			Queue<Cog> q = new LinkedList<>();
 			Queue<Cog> temp = new LinkedList<>();
-			boolean[] visited = new boolean[5];
+			boolean[] visited = new boolean[T + 1];
 			
 			q.offer(new Cog(order[k][0], order[k][1]));
 			temp.offer(new Cog(order[k][0], order[k][1]));
@@ -71,7 +75,7 @@ public class BJ14891_톱니바퀴 {
 				int d = q.peek().d;
 				q.poll();
 				
-				if (num < 1 || num > 4 || visited[num]) continue;
+				if (num < 1 || num > T || visited[num]) continue;
 				visited[num] = true;
 				
 				if (num != 1 && cog[num][idx[num][LEFT]] != cog[num - 1][idx[num - 1][RIGHT]]) {
@@ -79,7 +83,7 @@ public class BJ14891_톱니바퀴 {
 					if (!visited[num - 1]) temp.offer(new Cog(num - 1, -d));
 				}
 				
-				if (num != 4 && cog[num][idx[num][RIGHT]] != cog[num + 1][idx[num + 1][LEFT]]) {
+				if (num != T && cog[num][idx[num][RIGHT]] != cog[num + 1][idx[num + 1][LEFT]]) {
 					q.offer(new Cog(num + 1, -d));
 					if (!visited[num + 1]) temp.offer(new Cog(num + 1, -d));
 				}
@@ -101,10 +105,9 @@ public class BJ14891_톱니바퀴 {
 	
 	public static int getAnswer() {
 		int sum = 0;
-		for (int i = 1; i <= 4; i++) {
+		for (int i = 1; i <= T; i++) {
 			int noon = (idx[i][RIGHT] + 6) % 8;
-			//System.out.println(i + ") noon: " + noon);
-			if (cog[i][noon] == 1) sum += (int)Math.pow(2, i - 1);
+			if (cog[i][noon] == 1) sum ++;
 		}
 		
 		return sum;
@@ -121,11 +124,18 @@ public class BJ14891_톱니바퀴 {
 
 	}
 	
-	static String src = "10101111\r\n" + 
-			"01111101\r\n" + 
-			"11001110\r\n" + 
-			"00000010\r\n" + 
-			"2\r\n" + 
+	static String src = "4\r\n" + 
+			"10010011\r\n" + 
+			"01010011\r\n" + 
+			"11100011\r\n" + 
+			"01010101\r\n" + 
+			"8\r\n" + 
+			"1 1\r\n" + 
+			"2 1\r\n" + 
+			"3 1\r\n" + 
+			"4 1\r\n" + 
+			"1 -1\r\n" + 
+			"2 -1\r\n" + 
 			"3 -1\r\n" + 
-			"1 1";
+			"4 -1";
 }
