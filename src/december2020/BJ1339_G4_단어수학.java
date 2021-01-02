@@ -19,7 +19,7 @@ BB
 */
 
 public class BJ1339_G4_단어수학 {
-	static int N, ans;
+	static int N, ans, NUM = 9;
 	static ArrayList<Integer> val = new ArrayList<>();
 	static Map<Character, Integer> map = new HashMap<>();
 	
@@ -39,15 +39,20 @@ public class BJ1339_G4_단어수학 {
 			}
 		}
 		
+		
 		//map.entrySet().stream().forEach(e -> System.out.println(e));
 		
-		for (Character key : map.keySet())
-			val.add(map.get(key));
+//		for (Character key : map.keySet())
+//			val.add(map.get(key));
+//		
+//		Collections.sort(val, Collections.reverseOrder());
+//		int num = 9;
+//		for(int v : val)
+//			ans += (num--) * v;
 		
-		Collections.sort(val, Collections.reverseOrder());
-		int num = 9;
-		for(int v : val)
-			ans += (num--) * v;
+		map.entrySet().stream()
+		.sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+		.forEach(e -> ans += NUM-- * e.getValue());
 		
 		bw.write(String.valueOf(ans));
 		br.close();
