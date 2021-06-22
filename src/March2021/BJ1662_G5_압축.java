@@ -3,29 +3,24 @@ import java.util.*;
 import java.io.*;
 
 public class BJ1662_G5_압축 {
-    static char[] arr;
-    static Stack<Character> s = new Stack<>();
+    // 33(562(71(9)))
+    static Stack<Integer> s = new Stack<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringBuilder sb = new StringBuilder();
+        String str = br.readLine();
+        int startIdx = 0;
 
-        arr = br.readLine().toCharArray();
-        for (char item : arr) {
-            if (item == ')') {
-                String temp = sb.toString();
-                sb.setLength(0);
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '(') {
+                s.push(i);
+            }else if (str.charAt(i) == ')') {
+                startIdx = s.pop();
+                String Q = str.substring(startIdx + 1, i);
 
-                String A = s.peek().toString();
-                while(s.peek() != '(') s.pop();
-                s.pop();
-
-                int B = s.peek() - '0';
-                s.pop();
-
-                System.out.println();
-            } else s.push(item);
+            }
         }
 
     }
