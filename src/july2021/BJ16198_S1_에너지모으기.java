@@ -36,15 +36,15 @@ public class BJ16198_S1_에너지모으기 {
             return;
         }
 
-        for (int i = 1; i < N-1; i++) {
+        for (int i = 1; i < N - 1; i++) {
             if (visited[i]) continue;
 
             int left = i, right = i;
-            while(left-- > 0) {
+            while (left-- > 0) {
                 if (!visited[left]) break;
             }
 
-            while(right++ < N - 1) {
+            while (right++ < N - 1) {
                 if (!visited[right]) break;
             }
 
