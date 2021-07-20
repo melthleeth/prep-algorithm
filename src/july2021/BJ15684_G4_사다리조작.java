@@ -4,9 +4,8 @@ import java.io.*;
 import java.util.*;
 
 public class BJ15684_G4_사다리조작 {
-    static int N, M, H, ans = -1;
+    static int N, M, H, ans = -1; // H: row, N: column
     static int[][] map;
-    static boolean[][] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,8 +14,7 @@ public class BJ15684_G4_사다리조작 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         H = Integer.parseInt(st.nextToken());
-        map = new int[N + 1][H + 1];
-        visited = new boolean[N + 1][H + 1];
+        map = new int[H + 1][N + 1];
 
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
@@ -26,30 +24,29 @@ public class BJ15684_G4_사다리조작 {
             map[x][y + 1] = i + 1;
         }
 
+        if (result()) ans = 0;
+
         for (int i = 1; i <= 3; i++) {
-            installLadder(0, i);
             if (ans > -1) break;
+            installLadder(0, i);
         }
+
+        bw.write(String.valueOf(ans));
+        br.close();
+        bw.close();
     }
 
     public static void installLadder(int cnt, int L) {
         if (cnt == L) {
-            boolean flag = true;
-            for (int i = 1; i <= N; i++) {
-                if (!explore(i)) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag) ans = L;
+            if (result()) ans = L;
             return;
         }
 
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j < H; j++) {
-                if (map[i][j] == 1 || visited[i][j]) continue;
-                map[i][j] = 2;
-                map[i][j + 1] = 2;
+        for (int i = 1; i <= H; i++) {
+            for (int j = 1; j < N; j++) {
+                if (map[i][j] != 0 || map[i][j + 1] != 0) continue;
+                map[i][j] = (M + 1) + cnt;
+                map[i][j + 1] = (M + 1) + cnt;
                 installLadder(cnt + 1, L);
                 map[i][j] = 0;
                 map[i][j + 1] = 0;
@@ -57,28 +54,28 @@ public class BJ15684_G4_사다리조작 {
         }
     }
 
+    // i -> i로 가는지 체크
+    public static boolean result() {
+        for (int j = 1; j <= N; j++)
+            if (!explore(j)) return false;
+        return true;
+    }
+
     // 한 세로선에 대해 내려가는 동작 수행
     public static boolean explore(int start) {
-        boolean flag = false;
         int x = 0;
         int y = start;
 
-        while (x <= N) {
-            if (map[x + 1][y] == 0) x++;
-
-            switch (map[x][y]) {
-                case 0:
-                    x++;
-                    break;
-                case 1:
-                case 2:
-                    if (y > 1 && (map[x + 1][y - 1] == 1 || map[x + 1][y - 1] == 2)) y--;
-                    else if (y < N && (map[x + 1][y + 1] == 1 || map[x + 1][y + 1] == 2)) y++;
-                    x++;
-                    break;
+        while (x < H) {
+            if (map[x + 1][y] > 0) {
+                int ladderIdx = map[x + 1][y];
+                if (y > 1 && map[x + 1][y - 1] == ladderIdx) y--;
+                else if (y < N && map[x + 1][y + 1] == ladderIdx) y++;
             }
+            x++;
         }
 
-        return flag;
+        if (y == start) return true;
+        return false;
     }
 }
