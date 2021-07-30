@@ -3,9 +3,11 @@ package july2021;
 import java.io.*;
 import java.util.*;
 
-public class BJ1939_G4_중량제한 {
-    static int N, M, A, B, start, end;
+public class BJ1939_G4_중량제한_Dijkstra {
+    static int N, M, A, B;
+    static int[] dist;
     static ArrayList<Node> node[];
+    static final int INF = 1000000001;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,6 +16,8 @@ public class BJ1939_G4_중량제한 {
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
+        dist = new int[N + 1];
+        Arrays.fill(dist, -1);
         node = new ArrayList[N + 1];
         for (int i = 0; i <= N; i++)
             node[i] = new ArrayList<>();
@@ -25,42 +29,38 @@ public class BJ1939_G4_중량제한 {
             int weight = Integer.parseInt(st.nextToken());
             node[from].add(new Node(to, weight));
             node[to].add(new Node(from, weight));
-            end = Math.max(end, weight);
         }
         st = new StringTokenizer(br.readLine());
         A = Integer.parseInt(st.nextToken());
         B = Integer.parseInt(st.nextToken());
 
-        while (start <= end) {
-            int mid = (start + end) / 2;
-            if (BFS(mid)) start = mid + 1;
-            else end = mid - 1;
-        }
-        bw.write(String.valueOf(end));
+        Dijkstra();
+
+        bw.write(String.valueOf(dist[B]));
         br.close();
         bw.close();
     }
 
-    public static boolean BFS(int limit) {
-        Queue<Integer> q = new LinkedList<>();
-        boolean[] visited = new boolean[N + 1];
-        q.offer(A);
-        visited[A] = true;
+    public static void Dijkstra() {
+        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> (o2.weight - o1.weight));
+        pq.offer(new Node(A, INF));
+        dist[A] = INF;
+        while (!pq.isEmpty()) {
+            int from = pq.peek().to;
+            int weight = pq.peek().weight;
+            pq.poll();
+            if (dist[from] > weight) continue; // 이미 중량이 크면 update할 필요가 없으므로
 
-        while (!q.isEmpty()) {
-            int front = q.poll();
-            if (front == B) return true;
-
-            for (int i = 0; i < node[front].size(); i++) {
-                int to = node[front].get(i).to;
-                int weight = node[front].get(i).weight;
-                if (visited[to] || weight < limit) continue;
-                visited[to] = true;
-                q.offer(to);
+            for (int i = 0; i < node[from].size(); i++) {
+                int to = node[from].get(i).to;
+                int weightTo = Math.min(weight, node[from].get(i).weight);
+                if (weightTo > dist[to]) {
+                    dist[to] = weightTo;
+                    pq.offer(new Node(to, weightTo));
+                }
             }
 
         }
-        return false;
     }
 
     static class Node {
