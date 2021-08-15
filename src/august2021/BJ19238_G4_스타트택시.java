@@ -4,13 +4,18 @@ import java.io.*;
 import java.util.*;
 
 // ????!!! 일단 대략 짜고 돌렸는데 답이 이상하다 ㅋㅋㅋㅋ 다시해야겠다.. 자고일어나서 ㅠ
+// 원인은 HashMap에 custom class를 넣으면서 equals랑 hashCode overriding을 안해줘서 그렇다
+// 근데 시간초과 실화냐
+// BFS로 거리 구할때 minDist보다 커지면 바로 리턴하게 했고, 손님 있는곳 못갈수도 & 도착지 못갈수도 있는 경우 추가했음
+// 풀었다!!
 
 public class BJ19238_G4_스타트택시 {
-    static int N, M;
+    static int N, M, minDist;
     static long F;
     static boolean[][] map;
     static int[] dx = new int[]{1, 0, -1, 0};
     static int[] dy = new int[]{0, 1, 0, -1};
+    static final int INF = 1000;
     static Passenger taxiDriver = new Passenger(0, 0);
     static HashMap<Passenger, Boolean> passengerList = new HashMap<>();
     static PriorityQueue<Passenger> passengersNearby = new PriorityQueue<>((o1, o2) -> {
@@ -54,11 +59,10 @@ public class BJ19238_G4_스타트택시 {
         }
 
         while (M-- > 0) {
-            passengersNearby.clear();
             updatePassengerList();
 
             int dist = passengersNearby.peek().dist;
-            if (dist > F) {
+            if (dist > F || dist == INF) {
                 F = -1;
                 break;
             }
@@ -68,12 +72,14 @@ public class BJ19238_G4_스타트택시 {
             int sy = passengersNearby.peek().y;
             int ex = passengersNearby.peek().ex;
             int ey = passengersNearby.peek().ey;
-            System.out.println("태울 승객: (" + sx + ", " + sy + ") -> (" + ex + ", " + ey + ")");
+//            System.out.println("태울 승객: (" + sx + ", " + sy + ") -> (" + ex + ", " + ey + ")");
             Passenger p = new Passenger(sx, sy, 0, ex, ey);
             passengerList.remove(p);
+
+            minDist = INF;
             dist = getDist(sx, sy, ex, ey);
 
-            if (dist > F) {
+            if (dist > F || dist == INF) {
                 F = -1;
                 break;
             }
@@ -88,10 +94,12 @@ public class BJ19238_G4_스타트택시 {
     }
 
     public static void updatePassengerList() {
-        for (Passenger p : passengerList.keySet()) {
-            if (!passengerList.get(p)) continue;
+        passengersNearby.clear();
+        minDist = INF;
 
+        for (Passenger p : passengerList.keySet()) {
             int dist = getDist(taxiDriver.x, taxiDriver.y, p.x, p.y);
+            minDist = Math.min(dist, minDist);
             passengersNearby.offer(new Passenger(p.x, p.y, dist, p.ex, p.ey));
         }
     }
@@ -101,7 +109,6 @@ public class BJ19238_G4_스타트택시 {
         visited[sx][sy] = true;
         Queue<Passenger> q = new LinkedList<>();
         q.offer(new Passenger(sx, sy, 0));
-        int result = 1000;
 
         while (!q.isEmpty()) {
             int x = q.peek().x;
@@ -109,7 +116,8 @@ public class BJ19238_G4_스타트택시 {
             int dist = q.peek().dist;
             q.poll();
 
-            if (x == ex && y == ey) result = Math.min(result, dist);
+            if (dist > minDist) break;
+            if (x == ex && y == ey) return dist;
 
             for (int d = 0; d < 4; d++) {
                 int nx = x + dx[d];
@@ -120,7 +128,7 @@ public class BJ19238_G4_스타트택시 {
                 q.offer(new Passenger(nx, ny, dist + 1));
             }
         }
-        return result;
+        return INF;
     }
 
     public static boolean isIn(int x, int y) {
@@ -153,7 +161,16 @@ public class BJ19238_G4_스타트택시 {
 
         @Override
         public boolean equals(Object obj) {
-            return super.equals(obj);
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+
+            Passenger p = (Passenger) obj;
+            return (p.x == x && p.y == y && p.dist == dist && p.ex == ex && p.ey == ey);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y, dist, ex, ey);
         }
     }
 }
