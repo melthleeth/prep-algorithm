@@ -3,7 +3,7 @@ package august2021;
 import java.io.*;
 import java.util.*;
 
-public class BJ9944_NXM보드완주하기 {
+public class BJ9944_G3_NXM보드완주하기 {
     static int N, M, ans = 1000001, emptySpace;
     static int[] px = new int[]{1, 0, -1, 0};
     static int[] py = new int[]{0, 1, 0, -1};
