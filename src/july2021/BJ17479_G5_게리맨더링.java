@@ -33,7 +33,7 @@ public class BJ17479_G5_게리맨더링 {
 
         for (int i = 1; i <= N / 2; i++) {
             visited = new boolean[N + 1];
-            divideConstituency(1,0, i);
+            divideConstituency(1, 0, i);
         }
 
         bw.write(String.valueOf(ans));
@@ -47,7 +47,7 @@ public class BJ17479_G5_게리맨더링 {
         int cnt = 0, sum = 0;
 
         for (int i = 1; i <= N; i++) {
-            if (visited[i] == status){
+            if (visited[i] == status) {
                 q.offer(i);
                 checked[i] = true;
                 cnt++;
@@ -87,7 +87,7 @@ public class BJ17479_G5_게리맨더링 {
         for (int i = start; i <= N; i++) {
             if (visited[i]) continue;
             visited[i] = true;
-            divideConstituency(i + 1,depth + 1, num);
+            divideConstituency(i + 1, depth + 1, num);
             visited[i] = false;
         }
     }
