@@ -41,7 +41,29 @@ public class BJ5213_G2_과외맨 {
     }
 
     public static void solve() {
+        Queue<Tile> q = new LinkedList<>();
+        q.offer(new Tile(0, 1, 1, 1));
+        visited[0][0] = 1;
+        visited[0][1] = 1;
 
+        while(!q.isEmpty()) {
+          int x = q.peek().x;
+          int y = q.peek().y;
+          int idx = q.peek().idx;
+          int cnt = q.peek().cnt;
+          q.poll();
+
+          if ((x & 1) == 0 && (y & 1) == 0) {
+              if (isIn(x, y + 1)) {
+
+              }
+          }
+        }
+    }
+
+    public static boolean isIn(int x, int y) {
+        if (x < 0 || x >= 2 * N || y < 0 || y >= 2 * N) return false;
+        return true;
     }
 
     static class Tile {
@@ -49,5 +71,12 @@ public class BJ5213_G2_과외맨 {
         int y;
         int idx;
         int cnt;
+
+        public Tile(int x, int y, int idx, int cnt) {
+            this.x = x;
+            this.y = y;
+            this.idx = idx;
+            this.cnt = cnt;
+        }
     }
 }
