@@ -39,29 +39,26 @@ public class BJ1063_S4_킹 {
 
     public static void solve() {
         while (!q.isEmpty()) {
-            int x = q.peek().x;
-            int y = q.peek().y;
+            int px = q.peek().x;
+            int py = q.peek().y;
             q.poll();
 
-//            System.out.println("king = " + king.x + ", " + king.y);
-//            System.out.println("stone = " + stone.x + ", " + stone.y);
-
-            int kx = x + king.x;
-            int ky = y + king.y;
-
+            int kx = px + king.x;
+            int ky = py + king.y;
             if (!isIn(kx, ky)) continue;
             if (kx == stone.x && ky == stone.y) {
-                if (isIn(x + stone.x, y + stone.y)) {
-                    king.x = kx;
-                    king.y = ky;
-                    stone.x += x;
-                    stone.y += y;
+                if (isIn(px + stone.x, py + stone.y)) {
+                    king.x += px;
+                    king.y += py;
+                    stone.x += px;
+                    stone.y += py;
                 }
-            } else if (kx != stone.x && ky != stone.y) {
-                king.x = kx;
-                king.y = ky;
+            } else {
+                king.x += px;
+                king.y += py;
             }
-
+//            System.out.println("king = " + king.x + ", " + king.y);
+//            System.out.println("stone = " + stone.x + ", " + stone.y);
         }
     }
 
