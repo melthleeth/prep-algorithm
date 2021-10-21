@@ -2,6 +2,8 @@ package october2021;
 
 import java.io.*;
 
+// 10011001100110010110011111111111111111111101 SUBMARINE
+
 public class BJ2671_G5_잠수함식별 {
 
     public static void main(String[] args) throws IOException {
