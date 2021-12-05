@@ -15,6 +15,14 @@ public class BJ17266_S5_어두운굴다리 {
         M = Integer.parseInt(br.readLine());
 
         st = new StringTokenizer(br.readLine());
+        int prev = Integer.parseInt(st.nextToken());
+        ans = prev;
+        for (int i = 1; i < M; i++) {
+            int next = Integer.parseInt(st.nextToken());
+            ans = Math.max(ans, (int)Math.ceil((next - prev) / 2.0));
+            prev = next;
+        }
+        ans = Math.max(ans, N - prev);
 
         bw.write(String.valueOf(ans));
         br.close();
