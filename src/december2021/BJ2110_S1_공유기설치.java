@@ -33,6 +33,7 @@ public class BJ2110_S1_공유기설치 {
             int midIdx = (startIdx + endIdx) / 2;
             int mid = (start + end) / 2;
         }
+        // 모르겠....
 
         bw.write(String.valueOf(ans));
         br.close();
