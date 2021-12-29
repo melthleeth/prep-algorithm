@@ -44,38 +44,20 @@ public class BJ2056_G4_작업 {
             }
         }
 
-        int degreeCnt = 0, size = q.size(), time = 0;
+        int from = 0;
         while (!q.isEmpty()) {
-            int from = q.poll();
-
-            if (size > 0) {
-                time = Math.max(time, times[from]);
-                size--;
-            }
-
-            if (size == 0) {
-//                System.out.println("time = " + time);
-                ans += time;
-                time = 0;
-            }
+            from = q.poll();
 
             for (int to : set[from]) {
+                node[to] = Math.max(node[to], node[from] + times[to]);
                 inDegree[to]--;
                 if (inDegree[to] == 0) {
-                    degreeCnt++;
                     q.offer(to);
                 }
             }
-
-            if (size == 0){
-                size = degreeCnt;
-                degreeCnt = 0;
-            }
         }
 
-//        System.out.println(Arrays.toString(times));
-
-        bw.write(String.valueOf(ans));
+        bw.write(String.valueOf(node[from]));
         br.close();
         bw.close();
     }
