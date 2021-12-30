@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class BJ2056_G4_작업 {
-    static int N, ans;
+    static int N, maxValue;
     static int[] inDegree, times, node;
     static TreeSet<Integer>[] set;
     static Queue<Integer> q = new LinkedList<>();
@@ -27,12 +27,12 @@ public class BJ2056_G4_작업 {
             st = new StringTokenizer(br.readLine());
 
             times[i] = Integer.parseInt(st.nextToken());
+            node[i] = times[i];
 
             int cnt = Integer.parseInt(st.nextToken());
 
             if (cnt == 0) {
                 q.offer(i);
-                node[i] = times[i];
                 continue;
             }
 
@@ -44,9 +44,8 @@ public class BJ2056_G4_작업 {
             }
         }
 
-        int from = 0;
         while (!q.isEmpty()) {
-            from = q.poll();
+            int from = q.poll();
 
             for (int to : set[from]) {
                 node[to] = Math.max(node[to], node[from] + times[to]);
@@ -57,7 +56,10 @@ public class BJ2056_G4_작업 {
             }
         }
 
-        bw.write(String.valueOf(node[from]));
+        for (int time : node)
+            maxValue = Math.max(maxValue, time);
+
+        bw.write(String.valueOf(maxValue));
         br.close();
         bw.close();
     }
